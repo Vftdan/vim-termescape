@@ -96,7 +96,7 @@ let s:default_opts = {
 	\ 'cterm_styles': ['bold', 'italic', 'underline', 'reverse'],
 	\ 'gui_styles': ['bold', 'italic', 'underline', 'reverse', 'strikethrough'],
 	\ 'cterm_use_terminal_colors': 0,
-	\ 'gui_use_terminal_colors': 0,
+	\ 'gui_use_terminal_colors': 1,
 	\ 'detect_styles': ['bg', 'fg', 'bold', 'italic', 'underline', 'reverse', 'strikethrough'],
 	\ 'process_entire': 1,
 	\ 'handle_change': 1,
