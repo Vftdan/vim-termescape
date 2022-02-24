@@ -587,12 +587,13 @@ function! termescape#parse_lines(lines, init_styles, options)
 		\ }
 endfunction
 
-function! s:get_end_styles()
-	if has_key(b:, 'end_styles')
-		return b:end_styles
+function! s:get_end_styles(buf)
+	let l:vars = getbufinfo(a:buf)[0].variables
+	if has_key(l:vars, 'end_styles')
+		return l:vars.end_styles
 	endif
-	let b:end_styles = {0: {}}
-	return b:end_styles
+	let l:vars.end_styles = {0: {}}
+	return l:vars.end_styles
 endfunction
 
 function! termescape#rehighlight_range(buf, line1, line2)
@@ -612,7 +613,7 @@ function! termescape#rehighlight_range(buf, line1, line2)
 		endif
 	endfor
 	" TODO options
-	let l:end_styles = s:get_end_styles()
+	let l:end_styles = s:get_end_styles(a:buf)
 	let l:init_styles = get(l:end_styles, a:line1 - 1, {})
 	let l:parsed = termescape#parse_lines(getbufline(a:buf, a:line1, a:line2), l:init_styles, {})
 	call termescape#del_hl_lines(a:buf, a:line1, a:line2, l:range_highlights)
