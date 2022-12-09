@@ -592,18 +592,18 @@ endfunction
 
 function! s:get_end_styles(buf)
 	let l:vars = getbufinfo(a:buf)[0].variables
-	if has_key(l:vars, 'end_styles')
-		return l:vars.end_styles
+	if has_key(l:vars, '_termescape_end_styles')
+		return l:vars._termescape_end_styles
 	endif
-	let l:vars.end_styles = {0: {}}
-	return l:vars.end_styles
+	let l:vars._termescape_end_styles = {0: {}}
+	return l:vars._termescape_end_styles
 endfunction
 
 function! termescape#rehighlight_range(buf, line1, line2)
-	let l:highlights = getbufvar(a:buf, 'termescape_highlights', 0)
+	let l:highlights = getbufvar(a:buf, '_termescape_highlights', 0)
 	if type(l:highlights) == 0
 		let l:highlights = {}
-		call setbufvar(a:buf, 'termescape_highlights', l:highlights)
+		call setbufvar(a:buf, '_termescape_highlights', l:highlights)
 	endif
 	let l:range_highlights = []
 	for l:i in range(a:line1, a:line2)
@@ -642,10 +642,10 @@ function! termescape#rehighlight_range(buf, line1, line2)
 endfunction
 
 function! termescape#unhighlight_range(buf, line1, line2)
-	let l:highlights = getbufvar(a:buf, 'termescape_highlights', 0)
+	let l:highlights = getbufvar(a:buf, '_termescape_highlights', 0)
 	if type(l:highlights) == 0
 		let l:highlights = {}
-		call setbufvar(a:buf, 'termescape_highlights', l:highlights)
+		call setbufvar(a:buf, '_termescape_highlights', l:highlights)
 	endif
 	let l:range_highlights = []
 	for l:i in range(a:line1, a:line2)
@@ -675,7 +675,7 @@ endfunction
 
 function! termescape#enable_for_buffer(options)
 	let l:opts = s:extract_options(a:options, ['process_entire', 'handle_change'])
-	if l:opts.handle_change && !get(b:, 'termescape_au_registered')
+	if l:opts.handle_change && !get(b:, '_termescape_au_registered')
 		aug termescape_change_handler
 			au TextChanged,InsertLeave <buffer> call termescape#handle_change(line("'["), line("']"), {})
 		aug END
