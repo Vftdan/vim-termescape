@@ -110,7 +110,7 @@ function! s:extract_options(opts, keys)
 		if l:k == 'buffer'
 			let l:new_opts[l:k] = l:buf
 		elseif has_key(a:opts, l:k)
-			let l:new_opts[l:k] = l:opts[l:k]
+			let l:new_opts[l:k] = a:opts[l:k]
 		else
 			let l:new_opts[l:k] = termescape#get_buf_or_global_var(
 				\ l:buf, 'termescape_' . l:k,
