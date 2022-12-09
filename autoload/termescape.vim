@@ -102,6 +102,7 @@ let s:default_opts = {
 	\ 'handle_change': 1,
 	\ 'lines_before_change': 2,
 	\ 'lines_after_change': 5,
+	\ 'highlight_distinguishable_depths': [24, 8, 4],
 	\ }
 function! s:extract_options(opts, keys)
 	let l:buf = get(a:opts, 'buffer', '')
@@ -444,6 +445,7 @@ function! termescape#compare_styles(old, new, keys)
 	let l:changed = v:false
 	let l:filtered = {}
 	let l:name = ''
+	let l:opts = s:extract_options({}, ['highlight_distinguishable_depths'])
 	for l:k in ['bold', 'italic', 'underline', 'blink', 'reverse', 'invisible', 'strikethrough']
 		if index(a:keys, l:k) < 0
 			continue
@@ -462,7 +464,8 @@ function! termescape#compare_styles(old, new, keys)
 		if index(a:keys, l:k) < 0
 			let l:new_value = -1
 		endif
-		let l:cname = termescape#color_to_depth_str(l:new_value, [24], 0)
+		let l:cname = termescape#color_to_depth_str(l:new_value,
+			\ l:opts.highlight_distinguishable_depths, 0)
 		if l:cname[0] == '#'
 			let l:cname = l:cname[1:]
 		endif
