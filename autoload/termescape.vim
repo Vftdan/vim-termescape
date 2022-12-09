@@ -436,7 +436,7 @@ let s:style_abbrs = {
 	\ 'bold': 'b',
 	\ 'italic': 'i',
 	\ 'underline': 'u',
-	\ 'blink': 'B',
+	\ 'blink': 'xB',
 	\ 'reverse': 'r',
 	\ 'invisible': 'h',
 	\ 'strikethrough': 's',
