@@ -102,6 +102,8 @@ let s:default_opts = {
 	\ 'handle_change': 1,
 	\ 'lines_before_change': 2,
 	\ 'lines_after_change': 5,
+	\ 'registered_for_ft': 'termescapecolors',
+	\ 'disable_on_ft': 0,
 	\ 'highlight_distinguishable_depths': [24, 8, 4],
 	\ }
 function! s:extract_options(opts, keys)
@@ -674,13 +676,39 @@ function! termescape#handle_change(line1, line2, options)
 endfunction
 
 function! termescape#enable_for_buffer(options)
-	let l:opts = s:extract_options(a:options, ['process_entire', 'handle_change'])
+	let l:opts = s:extract_options(a:options, ['process_entire', 'handle_change', 'disable_on_ft'])
+	if l:opts.disable_on_ft
+		let b:termescape_registered_for_ft = &ft
+		aug termescape_filetypeother_handler
+			au!
+			" TODO can filetype of not the current buffer change?
+			au FileType <buffer> if s:extract_options({}, ['registered_for_ft']).registered_for_ft != &ft | call termescape#disable_for_buffer({'disable_on_ft': 1}) | endif
+		aug END
+	endif
 	if l:opts.handle_change && !get(b:, '_termescape_au_registered')
 		aug termescape_change_handler
+			au!
 			au TextChanged,InsertLeave <buffer> call termescape#handle_change(line("'["), line("']"), {})
 		aug END
+		let b:_termescape_au_registered = v:true
 	endif
 	if l:opts.process_entire
 		call termescape#rehighlight_range('', 1, line('$'))
 	endif
+endfunction
+
+function! termescape#disable_for_buffer(options)
+	let l:opts = s:extract_options(a:options, ['disable_on_ft'])
+	if get(b:, '_termescape_au_registered')
+		aug termescape_change_handler
+			au!
+		aug END
+		let b:_termescape_au_registered = v:false
+	endif
+	if l:opts.disable_on_ft
+		aug termescape_filetypeother_handler
+			au!
+		aug END
+	endif
+	call termescape#unhighlight_range('', 1, line('$'))
 endfunction
