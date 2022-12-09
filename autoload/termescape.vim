@@ -22,7 +22,8 @@ if s:use_nvim
 		let a:kw.dirty = 0
 	endfunction
 	function! termescape#del_hl_lines(buf, line_start, line_end, handles)
-		call nvim_buf_clear_namespace(bufnr(a:buf), s:namespace, a:line_start, a:line_end)
+		" In nvim API lines are zero-indexed and end-exclusive here
+		call nvim_buf_clear_namespace(bufnr(a:buf), s:namespace, a:line_start - 1, a:line_end)
 	endfunction
 else
 	function! termescape#add_hl(kw)
