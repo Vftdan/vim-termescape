@@ -288,7 +288,8 @@ function! termescape#color8to24(num)
 	endif
 	if l:num >= 232
 		let l:num -= 232
-		return 8 + 10 * l:num
+		let l:intensity = 8 + 10 * l:num
+		return [l:intensity, l:intensity, l:intensity]
 	endif
 	let l:num -= 16
 	let l:b = l:num % 6
@@ -312,7 +313,7 @@ function! termescape#color24to4(lst)
 	let l:lst_int = [0, 0, 0]
 	for l:i in [0, 1, 2]
 		let l:lst[l:i] = l:lst[l:i] / 0x55
-		let l:lst_round[l:i] = float2nr(round(l:lst[l:i]))
+		let l:lst_int[l:i] = float2nr(round(l:lst[l:i]))
 	endfor
 	" TODO better mapping
 	let l:w = (l:lst[0] + l:lst[1] + l:lst[2]) % 2
@@ -322,7 +323,7 @@ function! termescape#color24to4(lst)
 	for l:i in [0, 1, 2]
 		let l:lst_int[l:i] = l:lst[l:i] >= 1.5 ? 1 : 0
 	endfor
-	return l:w * 8 + l:lst_int[0] * 1 + l:lst_int[1] * 2 + l:lst_int[3] * 4
+	return l:w * 8 + l:lst_int[0] * 1 + l:lst_int[1] * 2 + l:lst_int[2] * 4
 endfunction
 
 function! termescape#color24to8(lst)
