@@ -93,7 +93,7 @@ endfunction
 
 let s:default_opts = {
 	\ 'cterm_depth': [8, 4],
-	\ 'gui_depth': [24, 8],
+	\ 'gui_depth': [24],
 	\ 'cterm_styles': ['bold', 'italic', 'underline', 'reverse'],
 	\ 'gui_styles': ['bold', 'italic', 'underline', 'reverse', 'strikethrough'],
 	\ 'cterm_use_terminal_colors': 0,
